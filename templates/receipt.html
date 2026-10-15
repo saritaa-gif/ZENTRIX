@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrix - Recibo</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/store" class="navbar-brand">
+        <div class="brand-icon">Z</div>
+        Zentrix
+      </a>
+      <div class="navbar-nav">
+        <a href="/store" class="nav-link">Tienda</a>
+        <a href="/profile" class="nav-link">Mi Perfil</a>
+        <a href="#" class="nav-link btn-accent" onclick="logout()">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="receipt-wrapper">
+    <div class="receipt" id="receipt">
+      <div class="receipt-header">
+        <div class="check-icon">✅</div>
+        <h1>¡Compra Realizada con Éxito!</h1>
+        <p style="color:var(--text-light);margin-top:8px;">Tu pedido ha sido procesado correctamente</p>
+      </div>
+
+      <div class="receipt-efecty hidden" id="r-efecty-section">
+        <div class="efecty-ref" style="background:#f0f9f2;border:2px dashed #b5dfbf;border-radius:var(--radius-sm);padding:20px;text-align:center;margin-bottom:24px;">
+          <div class="ref-label" style="font-size:0.78rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Referencia de Pago Efecty</div>
+          <div class="ref-code" id="r-efecty-ref" style="font-size:1.8rem;font-weight:800;color:#004d1b;letter-spacing:3px;">ZEN-000000</div>
+        </div>
+        <div style="background:#fdf5f3;border:1px solid #f5d5ce;border-radius:var(--radius-sm);padding:14px;margin-bottom:24px;font-size:0.9rem;color:var(--danger);">
+          <strong>Importante:</strong> Acércate a un punto <strong>Efecty</strong> y paga con la referencia mostrada arriba. Tu pedido será enviado una vez se confirme el pago.
+        </div>
+      </div>
+
+      <div class="receipt-info">
+        <div><span>Número de Orden</span><strong id="r-order-id">#000000</strong></div>
+        <div><span>Fecha</span><strong id="r-date"></strong></div>
+        <div><span>Cliente</span><strong id="r-customer"></strong></div>
+        <div><span>Email</span><strong id="r-email"></strong></div>
+        <div><span>Método de Pago</span><strong id="r-payment"></strong></div>
+        <div><span>Envío a</span><strong id="r-address"></strong></div>
+      </div>
+      <div class="receipt-items" id="r-items"></div>
+      <div class="receipt-summary-lines">
+        <div class="receipt-summary-line"><span>Subtotal</span><span id="r-subtotal">$0</span></div>
+        <div class="receipt-summary-line"><span>Envío</span><span id="r-shipping">$0</span></div>
+      </div>
+      <div class="receipt-total">
+        <span>Total Pagado: </span><span id="r-total">$0</span>
+      </div>
+      <div class="receipt-actions">
+        <button class="btn btn-secondary" onclick="window.print()">Imprimir Recibo</button>
+        <a href="/store" class="btn btn-primary" style="width:auto;">Seguir Comprando</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Zentrix. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="/static/js/receipt.js?v=6"></script>
+</body>
+</html>

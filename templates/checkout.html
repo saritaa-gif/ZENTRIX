@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrix - Pago</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/store" class="navbar-brand">
+        <div class="brand-icon">Z</div>
+        Zentrix
+      </a>
+      <div class="navbar-nav">
+        <a href="/store" class="nav-link">Tienda</a>
+        <a href="#" class="nav-link btn-accent" onclick="logout()">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="checkout-wrapper">
+    <h1 class="page-title">Finalizar Compra</h1>
+    <p class="page-subtitle">Revisa tu pedido y elige tu método de pago</p>
+
+    <div id="checkout-alert"></div>
+
+    <div class="checkout-grid">
+      <div>
+        <div class="card">
+          <h3>Datos del Cliente</h3>
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="customer-name" class="form-control" placeholder="Tu nombre completo">
+          </div>
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" id="customer-email" class="form-control" placeholder="correo@ejemplo.com">
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Dirección de Envío</h3>
+          <div class="form-group">
+            <label>Dirección completa</label>
+            <input type="text" id="shipping-address" class="form-control" placeholder="Calle, número, barrio, ciudad">
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Método de Pago</h3>
+          <div class="payment-options" id="payment-options">
+            <div class="payment-option selected" onclick="selectPayment('credit_card', this)">
+              <div class="pay-icon">💳</div>
+              <div class="pay-label">Tarjeta de Crédito</div>
+            </div>
+            <div class="payment-option" onclick="selectPayment('debit_card', this)">
+              <div class="pay-icon">🏦</div>
+              <div class="pay-label">Tarjeta de Débito</div>
+            </div>
+            <div class="payment-option" onclick="selectPayment('nequi', this)">
+              <div class="pay-icon">📱</div>
+              <div class="pay-label">Nequi</div>
+            </div>
+            <div class="payment-option" onclick="selectPayment('daviplata', this)">
+              <div class="pay-icon">💜</div>
+              <div class="pay-label">Daviplata</div>
+            </div>
+            <div class="payment-option" onclick="selectPayment('paypal', this)">
+              <div class="pay-icon">🅿️</div>
+              <div class="pay-label">PayPal</div>
+            </div>
+            <div class="payment-option" onclick="selectPayment('cash', this)">
+              <div class="pay-icon">💵</div>
+              <div class="pay-label">Efecty / Efectivo</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="card-details" style="margin-bottom:20px;">
+          <h3>Detalles de la Tarjeta</h3>
+          <div class="form-group">
+            <label>Número de tarjeta</label>
+            <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-group">
+              <label>Fecha de expiración</label>
+              <input type="text" id="card-expiry" class="form-control" placeholder="MM/AA" maxlength="5">
+            </div>
+            <div class="form-group">
+              <label>CVV</label>
+              <input type="text" id="card-cvv" class="form-control" placeholder="123" maxlength="4">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nombre en la tarjeta</label>
+            <input type="text" id="card-name" class="form-control" placeholder="Como aparece en la tarjeta">
+          </div>
+        </div>
+
+        <div class="card nequi-form hidden" id="nequi-details" style="margin-bottom:20px;">
+          <div class="nequi-header">
+            <div class="nequi-logo">N</div>
+            <span>Pago con Nequi</span>
+          </div>
+          <div class="nequi-instructions">
+            <div class="step-num">1</div>
+            <div>Abre tu app <strong>Nequi</strong> en tu celular.</div>
+          </div>
+          <div class="nequi-instructions">
+            <div class="step-num">2</div>
+            <div>Ve a <strong>"Enviar dinero"</strong> y digitá el número de celular que aparece abajo.</div>
+          </div>
+          <div class="nequi-instructions">
+            <div class="step-num">3</div>
+            <div>Ingresa el monto exacto de tu compra y confirma el envío.</div>
+          </div>
+          <div style="background:var(--accent-light);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:14px;text-align:center;margin:16px 0;">
+            <div style="font-size:0.78rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Enviar dinero a</div>
+            <div style="font-size:1.3rem;font-weight:800;color:var(--accent);" id="nequi-pay-number">319 256 2664</div>
+            <div style="font-size:0.82rem;color:var(--text-light);margin-top:4px;">Nombre: <strong>Zentrix Muebles</strong></div>
+          </div>
+          <div class="form-group">
+            <label>Número de celular Nequi</label>
+            <input type="text" id="nequi-phone" class="form-control" placeholder="Ej: 319 256 2664" maxlength="14">
+          </div>
+          <div class="form-group">
+            <label>Nombre asociado a la cuenta</label>
+            <input type="text" id="nequi-name" class="form-control" placeholder="Tu nombre en Nequi">
+          </div>
+        </div>
+
+        <div class="card daviplata-form hidden" id="daviplata-details" style="margin-bottom:20px;">
+          <div class="daviplata-header">
+            <div class="daviplata-logo">D</div>
+            <div class="daviplata-header-text">
+              <span>Pago con Daviplata</span>
+              <small>Paga rápido desde tu celular</small>
+            </div>
+          </div>
+          <div class="daviplata-instructions">
+            <div class="step-num">1</div>
+            <div>Abre tu app <strong>Daviplata</strong> en tu celular.</div>
+          </div>
+          <div class="daviplata-instructions">
+            <div class="step-num">2</div>
+            <div>Ve a <strong>"Enviar dinero"</strong> y digitá el número de celular que aparece abajo.</div>
+          </div>
+          <div class="daviplata-instructions">
+            <div class="step-num">3</div>
+            <div>Ingresa el monto exacto de tu compra y confirma el envío.</div>
+          </div>
+          <div class="daviplata-instructions">
+            <div class="step-num">4</div>
+            <div>Guarda el comprobante y completa los datos abajo para confirmar tu pedido.</div>
+          </div>
+          <div style="background:var(--accent-light);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:14px;text-align:center;margin:16px 0;">
+            <div style="font-size:0.78rem;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Enviar dinero a</div>
+            <div style="font-size:1.3rem;font-weight:800;color:var(--accent);" id="daviplata-pay-number">319 256 2664</div>
+            <div style="font-size:0.82rem;color:var(--text-light);margin-top:4px;">Nombre: <strong>Zentrix Muebles</strong></div>
+          </div>
+          <div class="form-group">
+            <label>Número de celular Daviplata</label>
+            <input type="text" id="daviplata-phone" class="form-control" placeholder="Ej: 319 256 2664" maxlength="14">
+          </div>
+          <div class="form-group">
+            <label>Nombre completo del pagador</label>
+            <input type="text" id="daviplata-name" class="form-control" placeholder="Como aparece en tu cédula">
+          </div>
+          <div class="form-group">
+            <label>Número de Cédula</label>
+            <input type="text" id="daviplata-cedula" class="form-control" placeholder="Ej: 1.234.567.890" maxlength="15">
+          </div>
+        </div>
+
+        <div class="card paypal-form hidden" id="paypal-details" style="margin-bottom:20px;">
+          <div class="paypal-header">
+            <div class="paypal-logo">PP</div>
+            <div class="paypal-header-text">
+              <span>Pago con PayPal</span>
+              <small>Paga seguro con tu cuenta PayPal</small>
+            </div>
+          </div>
+          <div class="paypal-instructions">
+            <div class="step-num">1</div>
+            <div>Al Confirmar serás redirigido a <strong>PayPal</strong> para completar el pago de forma segura.</div>
+          </div>
+          <div class="paypal-instructions">
+            <div class="step-num">2</div>
+            <div>Inicia sesión con tu cuenta de PayPal y revisa el monto a pagar.</div>
+          </div>
+          <div class="paypal-instructions">
+            <div class="step-num">3</div>
+            <div>Confirma el pago y serás redirigido automáticamente a tu recibo de compra.</div>
+          </div>
+          <div style="background:#fff7e6;border:1px solid #ffe0b2;border-radius:var(--radius-sm);padding:14px;margin:16px 0;font-size:0.88rem;">
+            <strong>ℹ️ Nota:</strong> Se te redirigirá a la plataforma de PayPal. Asegúrate de tener saldo o método de pago vinculado en tu cuenta.
+          </div>
+          <div class="form-group">
+            <label>Correo electrónico de tu cuenta PayPal</label>
+            <input type="email" id="paypal-email" class="form-control" placeholder="tu@email.com">
+          </div>
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="paypal-name" class="form-control" placeholder="Como aparece en tu cuenta PayPal">
+          </div>
+        </div>
+
+        <div class="card efecty-form hidden" id="efecty-details" style="margin-bottom:20px;">
+          <div class="efecty-header">
+            <div class="efecty-logo">EFECTY</div>
+            <div class="efecty-header-text">
+              <span>Pago en Efectivo</span>
+              <small>Paga en cualquier punto Efecty</small>
+            </div>
+          </div>
+          <div class="efecty-ref">
+            <div class="ref-label">Número de referencia de pago</div>
+            <div class="ref-code" id="efecty-ref-code">ZEN-000000</div>
+          </div>
+          <div class="efecty-instructions">
+            <div class="step-num">1</div>
+            <div>Acércate a un punto de pago <strong>Efecty</strong> más cercano y indica que vas a pagar una referencia.</div>
+          </div>
+          <div class="efecty-instructions">
+            <div class="step-num">2</div>
+            <div>Comunica el <strong>número de referencia</strong> al cajero y paga el monto exacto de tu compra.</div>
+          </div>
+          <div class="efecty-instructions">
+            <div class="step-num">3</div>
+            <div>Guarda tu comprobante de pago. Tu pedido será enviado una vez se confirme el pago.</div>
+          </div>
+          <div class="form-group" style="margin-top:18px;">
+            <label>Número de Cédula o Documento</label>
+            <input type="text" id="efecty-cedula" class="form-control" placeholder="Ej: 1.234.567.890" maxlength="15">
+          </div>
+          <div class="form-group">
+            <label>Nombre completo del pagador</label>
+            <input type="text" id="efecty-name" class="form-control" placeholder="Como aparece en tu documento">
+          </div>
+          <div class="form-group">
+            <label>Teléfono de contacto</label>
+            <input type="text" id="efecty-phone" class="form-control" placeholder="Ej: 300 123 4567" maxlength="14">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h3>Resumen del Pedido</h3>
+          <div id="order-items"></div>
+          <div class="order-summary-lines">
+            <div class="order-summary-line"><span>Subtotal</span><span id="order-subtotal">$0</span></div>
+            <div class="order-summary-line"><span>Envío</span><span id="order-shipping">$0</span></div>
+          </div>
+          <div class="order-summary-total">
+            <span>Total a pagar:</span>
+            <span id="order-total">$0</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="processPayment()" id="btn-pay" style="width:100%;margin-top:10px;">
+          Confirmar y Pagar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Zentrix. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="/static/js/checkout.js?v=6"></script>
+</body>
+</html>

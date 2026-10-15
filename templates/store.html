@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrix - Tienda de Muebles</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/store" class="navbar-brand">
+        <div class="brand-icon">Z</div>
+        Zentrix
+      </a>
+      <div class="navbar-nav">
+        <a href="/store" class="nav-link active">Tienda</a>
+        <a href="/profile" class="nav-link">Mi Perfil</a>
+        <a href="#" class="nav-link cart-link" onclick="openCart()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-badge" id="cart-count">0</span>
+        </a>
+        <a href="#" class="nav-link btn-accent" onclick="logout()">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-slider" id="hero-slider">
+      <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1400&h=600&fit=crop')">
+        <div class="hero-content">
+          <span class="hero-badge">Nueva Colección</span>
+          <h1>Diseña tu espacio <br><span class="text-gradient">ideal</span></h1>
+          <p>Muebles modernos con estilo y confort para transformar cada rincón de tu hogar.</p>
+          <a href="#productos" class="btn-hero">Ver Catálogo</a>
+        </div>
+      </div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1400&h=600&fit=crop')">
+        <div class="hero-content">
+          <span class="hero-badge">Hasta 30% OFF</span>
+          <h1>Ofertas de <br><span class="text-gradient">temporada</span></h1>
+          <p>Aprovecha los mejores precios en muebles seleccionados para ti.</p>
+          <a href="#productos" class="btn-hero">Comprar Ahora</a>
+        </div>
+      </div>
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1400&h=600&fit=crop')">
+        <div class="hero-content">
+          <span class="hero-badge">Envío Gratis</span>
+          <h1>Comodidad <br><span class="text-gradient">a tu puerta</span></h1>
+          <p>Recibe tus muebles favoritos donde quieras, sin costo adicional.</p>
+          <a href="#productos" class="btn-hero">Explorar</a>
+        </div>
+      </div>
+    </div>
+    <button class="hero-arrow hero-prev" onclick="prevSlide()">&#8249;</button>
+    <button class="hero-arrow hero-next" onclick="nextSlide()">&#8250;</button>
+    <div class="hero-dots" id="hero-dots">
+      <span class="dot active" onclick="goToSlide(0)"></span>
+      <span class="dot" onclick="goToSlide(1)"></span>
+      <span class="dot" onclick="goToSlide(2)"></span>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="benefits">
+    <div class="container">
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🚚</div>
+          <h4>Envío Gratis</h4>
+          <p>En compras mayores a $500.000</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🔄</div>
+          <h4>Devolución Fácil</h4>
+          <p>30 días para cambios</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🛡️</div>
+          <h4>Garantía 2 Años</h4>
+          <p>En todos nuestros productos</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💬</div>
+          <h4>Atención 24/7</h4>
+          <p>Estamos siempre para ti</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTOS -->
+  <section class="products-section" id="productos">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Catálogo</span>
+        <h2>Explora nuestros <span class="text-gradient">muebles</span></h2>
+        <p>Descubre piezas únicas que combinan diseño, calidad y confort</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterProducts('all', this)">Todos</button>
+        <button class="filter-btn" onclick="filterProducts('sillas', this)">🪑 Sillas</button>
+        <button class="filter-btn" onclick="filterProducts('sofas', this)">🛋️ Sofás</button>
+        <button class="filter-btn" onclick="filterProducts('mesas', this)">🪵 Mesas</button>
+        <button class="filter-btn" onclick="filterProducts('camas', this)">🛏️ Camas</button>
+        <button class="filter-btn" onclick="filterProducts('escritorios', this)">🖥️ Escritorios</button>
+        <button class="filter-btn" onclick="filterProducts('almacenamiento', this)">📦 Almacenamiento</button>
+        <button class="filter-btn" onclick="filterProducts('iluminacion', this)">💡 Iluminación</button>
+        <div class="search-wrapper">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-box" placeholder="Buscar muebles..." oninput="searchProducts(this.value)">
+        </div>
+      </div>
+
+      <div class="product-grid" id="product-grid">
+        <div class="loading-spinner" style="grid-column:1/-1;">
+          <div class="spinner"></div>
+          <p>Cargando productos...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Testimonios</span>
+        <h2>Lo que dicen nuestros <span class="text-gradient">clientes</span></h2>
+        <p>Miles de familias ya confían en Zentrix para amueblar su hogar</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"El sofá que compré es increíble, muy cómodo y la calidad es espectacular. El envío fue súper rápido."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div>
+              <strong>María García</strong>
+              <span>Bogotá</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Excelente atención al cliente. Me ayudaron a elegir los muebles perfectos para mi apartamento nuevo."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">C</div>
+            <div>
+              <strong>Carlos Ramírez</strong>
+              <span>Medellín</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Los precios son muy buenos comparado con otras tiendas. El escritorio de roble quedó perfecto en mi oficina."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">L</div>
+            <div>
+              <strong>Laura Martínez</strong>
+              <span>Cali</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARCAS / CONFÍAN EN NOSOTROS -->
+  <section class="brands-section">
+    <div class="container">
+      <p class="brands-label">Marcas y empresas que confían en nosotros</p>
+      <div class="brands-row">
+        <span class="brand-item">IKEA</span>
+        <span class="brand-item">West Elm</span>
+        <span class="brand-item">Restoration Hardware</span>
+        <span class="brand-item">CB2</span>
+        <span class="brand-item">Article</span>
+        <span class="brand-item">Joybird</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS FRECUENTES -->
+  <section class="faq-section" id="faq">
+    <div class="container" style="max-width:820px;">
+      <div class="section-header" style="margin-bottom:30px;">
+        <span class="section-tag">Preguntas Frecuentes</span>
+        <h2>Resolvemos tus <span class="text-gradient">dudas</span></h2>
+        <p>Todo lo que necesitas saber sobre envíos, devoluciones y garantías</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cuánto tarda el envío?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Los envíos se realizan entre 3 y 7 días hábiles según tu ciudad. En Bogotá, Medellín y Cali llegan en 2-3 días.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cuándo el envío es gratis?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">El envío es totalmente gratis para compras superiores a $500.000 COP. Para compras menores, el costo es de $10.000 COP.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cómo realizo una devolución?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Tienes 30 días desde la entrega para solicitar cambios o devoluciones. Contáctanos por WhatsApp y agendamos la recogida sin costo.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Qué garantía tienen los productos?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Todos nuestros muebles tienen 2 años de garantía sobre defectos de fabricación y materiales.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Qué métodos de pago aceptan?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Aceptamos tarjetas de crédito y débito, Nequi, Daviplata, PayPal y pago en efectivo vía Efecty.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Puedo pagar con cuotas?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">Sí, próximamente habilitaremos pagos a cuotas con tarjetas de crédito.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHATSAPP FLOTANTE -->
+  <a href="https://wa.me/573224097734?text=Hola%20Zentrix%2C%20quiero%20información%20sobre%20sus%20muebles" target="_blank" class="whatsapp-float" title="Escríbenos por WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="footer-brand">
+            <div class="brand-icon">Z</div>
+            Zentrix
+          </div>
+          <p class="footer-desc">Muebles modernos con estilo y confort para transformar cada rincón de tu hogar.</p>
+          <div class="footer-social">
+            <a href="https://instagram.com/zentrixmuebles" target="_blank" class="social-icon" title="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://facebook.com/zentrixmuebles" target="_blank" class="social-icon" title="Facebook">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://tiktok.com/@zentrixmuebles" target="_blank" class="social-icon" title="TikTok">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Tienda</h4>
+          <a href="#productos">Catálogo</a>
+          <a href="#productos">Ofertas</a>
+          <a href="#productos">Nuevos</a>
+        </div>
+        <div class="footer-col">
+          <h4>Ayuda</h4>
+          <a href="#faq">Preguntas Frecuentes</a>
+          <a href="#faq">Envíos</a>
+          <a href="#faq">Devoluciones</a>
+          <a href="https://wa.me/573224097734?text=Hola%20Zentrix%2C%20necesito%20ayuda" target="_blank">Contacto WhatsApp</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <a href="https://wa.me/573224097734" target="_blank">📱 WhatsApp</a>
+          <a href="mailto:hola@zentrix.com">✉️ hola@zentrix.com</a>
+          <a href="tel:+573001234567">📞 +57 322 4097734</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Zentrix. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART -->
+  <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h3>Mi Carrito</h3>
+      <button class="cart-close" onclick="closeCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cart-items">
+      <div class="cart-empty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <p>Tu carrito está vacío</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div id="shipping-progress"></div>
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cart-total">$0</span>
+      </div>
+      <button class="btn btn-primary" onclick="goToCheckout()" id="btn-checkout" disabled>Proceder al Pago</button>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div class="modal-overlay" id="product-modal"></div>
+
+  <script src="/static/js/store.js?v=10"></script>
+</body>
+</html>

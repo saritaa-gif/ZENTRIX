@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrix - Panel de Administración</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/admin" class="navbar-brand">
+        <div class="brand-icon">Z</div>
+        Zentrix Admin
+      </a>
+      <div class="navbar-nav">
+        <a href="/admin" class="nav-link active">Dashboard</a>
+        <a href="/admin?tab=orders" class="nav-link">Órdenes</a>
+        <a href="/profile" class="nav-link">Mi Perfil</a>
+        <a href="#" class="nav-link btn-accent" onclick="logout()">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="admin-wrapper">
+    <div class="admin-header">
+      <div>
+        <h1 class="page-title">Panel de Administración</h1>
+        <p class="page-subtitle">Gestiona productos, pedidos y más</p>
+      </div>
+      <button class="btn btn-primary" style="width:auto;" onclick="openProductModal()">+ Agregar Producto</button>
+    </div>
+
+    <div class="admin-stats" id="admin-stats"></div>
+
+    <div id="admin-products-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="font-size:1.3rem;">Productos</h2>
+        <input type="text" class="search-box" placeholder="Buscar producto..." oninput="filterAdminProducts(this.value)">
+      </div>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="admin-orders-section" style="margin-top:40px;">
+      <h2 style="font-size:1.3rem;margin-bottom:16px;">Órdenes Recientes</h2>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th># Orden</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Pago</th>
+              <th>Estado</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="admin-orders-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal">
+      <h3 id="modal-title">Agregar Producto</h3>
+      <div id="modal-alert"></div>
+      <form onsubmit="saveProduct(event)">
+        <input type="hidden" id="edit-product-id">
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input type="text" id="p-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="p-desc" class="form-control" rows="3"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group">
+            <label>Precio ($) *</label>
+            <input type="number" id="p-price" class="form-control" step="0.01" min="0" required>
+          </div>
+          <div class="form-group">
+            <label>Stock</label>
+            <input type="number" id="p-stock" class="form-control" min="0" value="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="p-category" class="form-control">
+            <option value="sillas">Sillas</option>
+            <option value="sofas">Sofás</option>
+            <option value="mesas">Mesas</option>
+            <option value="camas">Camas</option>
+            <option value="escritorios">Escritorios</option>
+            <option value="almacenamiento">Almacenamiento</option>
+            <option value="iluminacion">Iluminación</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>URL de imagen</label>
+          <input type="text" id="p-image" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" onclick="closeProductModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="width:auto;">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Zentrix. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="/static/js/admin.js?v=6"></script>
+</body>
+</html>
+
+
+
+

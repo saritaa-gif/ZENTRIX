@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrix - Mi Perfil</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="/store" class="navbar-brand">
+        <div class="brand-icon">Z</div>
+        Zentrix
+      </a>
+      <div class="navbar-nav">
+        <a href="/store" class="nav-link">Tienda</a>
+        <a href="/profile" class="nav-link active">Mi Perfil</a>
+        <a href="#" class="nav-link btn-accent" onclick="logout()">Salir</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="profile-wrapper">
+    <h1 class="page-title">Mi Perfil</h1>
+    <p class="page-subtitle">Gestiona tu información y revisa tus pedidos</p>
+
+    <div id="profile-alert"></div>
+
+    <div class="profile-card">
+      <div class="profile-avatar" id="profile-avatar">?</div>
+      <h3 id="profile-name">Cargando...</h3>
+      <form onsubmit="updateProfile(event)">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" id="prof-name" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="prof-email" class="form-control" disabled style="opacity:0.6;">
+        </div>
+        <div class="form-group">
+          <label>Dirección</label>
+          <input type="text" id="prof-address" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="text" id="prof-phone" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary" style="max-width:300px;">Actualizar Perfil</button>
+      </form>
+    </div>
+
+    <div class="profile-card">
+      <h3>Mis Pedidos</h3>
+      <div class="orders-list" id="orders-list">
+        <p style="color:#7f8c8d;text-align:center;padding:20px;">Cargando pedidos...</p>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <h3>Mis Preferencias</h3>
+      <div id="preferences-section">
+        <div class="pref-group">
+          <h4>🎨 Estilos Favoritos</h4>
+          <div id="pref-styles" class="pref-list">
+            <p style="color:#7f8c8d;font-size:0.85rem;">Haz el <a href="/quiz">quiz de decoración</a> para guardar tu estilo favorito.</p>
+          </div>
+        </div>
+        <div class="pref-group">
+          <h4>🏠 Habitaciones</h4>
+          <div id="pref-rooms" class="pref-list">
+            <p style="color:#7f8c8d;font-size:0.85rem;">Guarda las habitaciones que más te gusten.</p>
+          </div>
+        </div>
+        <div class="pref-group">
+          <h4>🛋️ Muebles Favoritos</h4>
+          <div id="pref-furniture" class="pref-list">
+            <p style="color:#7f8c8d;font-size:0.85rem;">Agrega muebles desde la tienda o el quiz.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 Zentrix. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="/static/js/profile.js?v=6"></script>
+</body>
+</html>
+
+
+
+

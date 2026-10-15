@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrix - Iniciar Sesión</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div class="brand-icon" style="width:48px;height:48px;font-size:1.3rem;margin:0 auto;border-radius:14px;">Z</div>
+      </div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="showTab('login')">Iniciar Sesión</div>
+        <div class="auth-tab" onclick="showTab('register')">Crear Cuenta</div>
+      </div>
+
+      <div id="login-form" class="auth-form active">
+        <div id="login-alert"></div>
+        <form onsubmit="handleLogin(event)" autocomplete="off">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" class="form-control" placeholder="tu@email.com" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="login-password" class="form-control" placeholder="Tu contraseña" autocomplete="new-password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+        </form>
+        <p style="text-align:center;margin-top:16px;font-size:0.82rem;color:#7f8c8d;">
+          Admin: admin@tienda.com / admin123
+        </p>
+      </div>
+
+      <div id="register-form" class="auth-form">
+        <div id="register-alert"></div>
+        <form onsubmit="handleRegister(event)" autocomplete="off">
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="Tu nombre" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="tu@email.com" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label>Dirección</label>
+            <input type="text" id="reg-address" class="form-control" placeholder="Tu dirección de envío" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" id="reg-phone" class="form-control" placeholder="Tu teléfono" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      if (tab === 'login') {
+        document.querySelectorAll('.auth-tab')[0].classList.add('active');
+        document.getElementById('login-form').classList.add('active');
+      } else {
+        document.querySelectorAll('.auth-tab')[1].classList.add('active');
+        document.getElementById('register-form').classList.add('active');
+      }
+    }
+
+    function showAlert(containerId, msg, type) {
+      document.getElementById(containerId).innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (data.error) { showAlert('login-alert', data.error, 'error'); return; }
+        sessionStorage.clear();
+        if (data.role === 'admin') window.location.href = '/admin';
+        else window.location.href = '/store';
+      } catch (err) { showAlert('login-alert', 'Error de conexión', 'error'); }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const body = {
+        name: document.getElementById('reg-name').value,
+        email: document.getElementById('reg-email').value,
+        password: document.getElementById('reg-password').value,
+        address: document.getElementById('reg-address').value,
+        phone: document.getElementById('reg-phone').value
+      };
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.error) { showAlert('register-alert', data.error, 'error'); return; }
+        sessionStorage.clear();
+        window.location.href = '/store';
+      } catch (err) { showAlert('register-alert', 'Error de conexión', 'error'); }
+    }
+
+    fetch('/api/me').then(r => r.json()).then(d => {
+      if (!d.error) {
+        if (d.role === 'admin') window.location.href = '/admin';
+        else window.location.href = '/store';
+      }
+    }).catch(() => {});
+
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.auth-form input').forEach(inp => { inp.value = ''; });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
