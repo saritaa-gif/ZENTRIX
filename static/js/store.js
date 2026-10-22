@@ -83,6 +83,7 @@ async function checkAuth() {
       return;
     }
     isLoggedIn = true;
+    if (allProducts.length) renderProducts();
     if (data.role === 'admin') {
       document.querySelector('.navbar-nav').innerHTML = `
         <a href="/admin" class="nav-link">Admin</a>
@@ -174,7 +175,7 @@ function openProductDetail(productId) {
       <button class="modal-close-x" onclick="closeProductDetail()">&times;</button>
       <div class="detail-grid">
         <div class="detail-img-section">
-          <img id="detail-img" src="${product.image_url}" alt="${product.name}" style="width:100%;height:320px;object-fit:cover;border-radius:var(--radius-sm);background:#e8e2da;">
+          <img id="detail-img" src="${product.image || 'https://via.placeholder.com/400x300?text=Mueble'}" alt="${product.name}" style="width:100%;height:320px;object-fit:cover;border-radius:var(--radius-sm);background:#e8e2da;">
           <div class="detail-colors-row">
             ${v.colors.map((c, i) => `
               <div class="detail-color-swatch ${i === 0 ? 'active' : ''}"
@@ -472,7 +473,10 @@ function toggleFaq(btn) {
 }
 
 // --- INIT ---
-checkAuth();
-loadProducts();
-loadCart();
-resetSlideInterval();
+async function init() {
+  await checkAuth();
+  loadProducts();
+  loadCart();
+  resetSlideInterval();
+}
+init();

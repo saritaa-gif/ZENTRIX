@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zentrix - Panel de Administración</title>
-  <link rel="stylesheet" href="/static/css/styles.css?v=6">
+  <link rel="stylesheet" href="/static/css/styles.css?v=11">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
@@ -114,9 +114,18 @@
             <option value="general">General</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>URL de imagen</label>
-          <input type="text" id="p-image" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+<div class="form-group">
+          <label>Imagen del producto</label>
+          <div class="upload-row">
+            <input type="file" id="p-image-file" accept="image/*" onchange="uploadImage()">
+          </div>
+          <div id="upload-status"></div>
+          <label style="margin-top:12px;">o pega una URL de imagen</label>
+          <input type="text" id="p-image" class="form-control" placeholder="https://ejemplo.com/imagen.jpg" oninput="previewImage()">
+          <img id="p-image-preview" class="image-preview" alt="Vista previa" style="display:none;"
+               onload="this.style.display='block';document.getElementById('p-image-error').style.display='none';"
+               onerror="this.style.display='none';document.getElementById('p-image-error').style.display='block';">
+          <div id="p-image-error" class="image-preview-error" style="display:none;">⚠️ No se pudo cargar la imagen. Revisa la URL.</div>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-outline" onclick="closeProductModal()">Cancelar</button>
@@ -130,7 +139,7 @@
     <p>&copy; 2026 Zentrix. Todos los derechos reservados.</p>
   </footer>
 
-  <script src="/static/js/admin.js?v=6"></script>
+  <script src="/static/js/admin.js?v=10"></script>
 </body>
 </html>
 

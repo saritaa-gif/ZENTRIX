@@ -41,7 +41,7 @@ function renderAdminProducts(products) {
   }
   tbody.innerHTML = products.map(p => `
     <tr>
-      <td><img src="${p.image_url || 'https://via.placeholder.com/50x35'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/50x35'"></td>
+      <td><img src="${p.image || 'https://via.placeholder.com/50x35'}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/50x35'"></td>
       <td><strong>${p.name}</strong></td>
       <td>${p.category}</td>
       <td>${formatCOP(p.price)}</td>
@@ -72,7 +72,7 @@ function openProductModal(product = null) {
     document.getElementById('p-price').value = product.price;
     document.getElementById('p-stock').value = product.stock;
     document.getElementById('p-category').value = product.category;
-    document.getElementById('p-image').value = product.image_url;
+    document.getElementById('p-image').value = product.image || '';
   } else {
     document.getElementById('modal-title').textContent = 'Agregar Producto';
     document.getElementById('edit-product-id').value = '';
@@ -83,10 +83,55 @@ function openProductModal(product = null) {
     document.getElementById('p-category').value = 'sillas';
     document.getElementById('p-image').value = '';
   }
+  const fileInput = document.getElementById('p-image-file');
+  if (fileInput) fileInput.value = '';
+  const st = document.getElementById('upload-status');
+  if (st) { st.textContent = ''; st.className = ''; }
+  previewImage();
 }
 
 function closeProductModal() {
   document.getElementById('product-modal').classList.remove('open');
+}
+
+function previewImage() {
+  const url = document.getElementById('p-image').value.trim();
+  const img = document.getElementById('p-image-preview');
+  const err = document.getElementById('p-image-error');
+  err.style.display = 'none';
+  if (!url) {
+    img.style.display = 'none';
+    img.removeAttribute('src');
+    return;
+  }
+  img.src = url;
+}
+
+async function uploadImage() {
+  const input = document.getElementById('p-image-file');
+  const status = document.getElementById('upload-status');
+  if (!input.files || !input.files[0]) return;
+  const formData = new FormData();
+  formData.append('file', input.files[0]);
+  status.className = 'upload-status';
+  status.textContent = '⏳ Subiendo imagen...';
+  try {
+    const res = await fetch('/api/upload', { method: 'POST', body: formData });
+    let data = {};
+    try { data = await res.json(); } catch {}
+    if (!res.ok || data.error) {
+      status.className = 'upload-status error';
+      status.textContent = data.error || ('Error del servidor (HTTP ' + res.status + ')');
+      return;
+    }
+    document.getElementById('p-image').value = data.url;
+    status.className = 'upload-status success';
+    status.textContent = '✓ Imagen subida correctamente';
+    previewImage();
+  } catch (e) {
+    status.className = 'upload-status error';
+    status.textContent = 'No se pudo conectar con el servidor: ' + e.message;
+  }
 }
 
 function editProduct(id) {

@@ -2,6 +2,8 @@ import pymysql
 import pymysql.cursors
 import bcrypt
 import decimal
+import os
+import time
 from functools import wraps
 from flask import Flask, request, jsonify, session, render_template
 from flask_cors import CORS
@@ -9,6 +11,15 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.secret_key = 'muebles-tienda-secret-2026'
 CORS(app, supports_credentials=True)
+
+
+@app.after_request
+def add_no_cache_headers(resp):
+    if resp.mimetype == 'text/html':
+        resp.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        resp.headers['Pragma'] = 'no-cache'
+        resp.headers['Expires'] = '0'
+    return resp
 
 # ============================================
 # CONFIGURACION DE MYSQL
@@ -317,6 +328,32 @@ def get_products():
         return jsonify(convert_decimals(products))
     finally:
         conn.close()
+
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'images')
+ALLOWED_EXT = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'avif', 'bmp', 'jfif', 'tiff', 'tif', 'ico'}
+
+
+@app.route('/api/upload', methods=['POST'])
+@require_admin
+def upload_image():
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No se envió ningún archivo'}), 400
+        file = request.files['file']
+        if not file.filename:
+            return jsonify({'error': 'No seleccionaste ningún archivo'}), 400
+        ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
+        if ext not in ALLOWED_EXT:
+            return jsonify({'error': 'Formato ".%s" no permitido. Usa JPG, PNG, WEBP, GIF, AVIF o BMP.' % ext}), 400
+        filename = 'prod_%d_%s.%s' % (int(time.time()), os.urandom(4).hex(), ext)
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        print('UPLOAD OK -> %s (%s bytes)' % (filename, os.path.getsize(os.path.join(UPLOAD_FOLDER, filename))), flush=True)
+        return jsonify({'success': True, 'url': '/static/images/' + filename})
+    except Exception as e:
+        print('UPLOAD ERROR -> %r' % e, flush=True)
+        return jsonify({'error': 'Error del servidor al guardar: %s' % e}), 500
+
 
 @app.route('/api/products/all')
 @require_admin
